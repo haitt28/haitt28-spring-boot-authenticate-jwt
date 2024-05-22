@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.jwt.advice;
+package com.hai.tran.spring.security.jwt.advice;
 
 import java.util.Date;
 

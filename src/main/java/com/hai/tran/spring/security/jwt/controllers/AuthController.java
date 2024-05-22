@@ -1,12 +1,21 @@
-package com.bezkoder.spring.security.jwt.controllers;
+package com.hai.tran.spring.security.jwt.controllers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
+import com.hai.tran.spring.security.jwt.exception.TokenRefreshException;
+import com.hai.tran.spring.security.jwt.models.ERole;
+import com.hai.tran.spring.security.jwt.models.RefreshToken;
+import com.hai.tran.spring.security.jwt.models.Role;
+import com.hai.tran.spring.security.jwt.models.User;
+import com.hai.tran.spring.security.jwt.payload.request.LoginRequest;
+import com.hai.tran.spring.security.jwt.payload.request.SignupRequest;
+import com.hai.tran.spring.security.jwt.payload.request.TokenRefreshRequest;
+import com.hai.tran.spring.security.jwt.payload.response.JwtResponse;
+import com.hai.tran.spring.security.jwt.payload.response.MessageResponse;
+import com.hai.tran.spring.security.jwt.payload.response.TokenRefreshResponse;
+import com.hai.tran.spring.security.jwt.repository.RoleRepository;
+import com.hai.tran.spring.security.jwt.repository.UserRepository;
+import com.hai.tran.spring.security.jwt.security.jwt.JwtUtils;
+import com.hai.tran.spring.security.jwt.security.services.RefreshTokenService;
+import com.hai.tran.spring.security.jwt.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,28 +23,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.bezkoder.spring.security.jwt.exception.TokenRefreshException;
-import com.bezkoder.spring.security.jwt.models.ERole;
-import com.bezkoder.spring.security.jwt.models.RefreshToken;
-import com.bezkoder.spring.security.jwt.models.Role;
-import com.bezkoder.spring.security.jwt.models.User;
-import com.bezkoder.spring.security.jwt.payload.request.LoginRequest;
-import com.bezkoder.spring.security.jwt.payload.request.SignupRequest;
-import com.bezkoder.spring.security.jwt.payload.request.TokenRefreshRequest;
-import com.bezkoder.spring.security.jwt.payload.response.JwtResponse;
-import com.bezkoder.spring.security.jwt.payload.response.MessageResponse;
-import com.bezkoder.spring.security.jwt.payload.response.TokenRefreshResponse;
-import com.bezkoder.spring.security.jwt.repository.RoleRepository;
-import com.bezkoder.spring.security.jwt.repository.UserRepository;
-import com.bezkoder.spring.security.jwt.security.jwt.JwtUtils;
-import com.bezkoder.spring.security.jwt.security.services.RefreshTokenService;
-import com.bezkoder.spring.security.jwt.security.services.UserDetailsImpl;
+import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -69,14 +63,14 @@ public class AuthController {
 
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-    String jwtToken = jwtUtils.generateJwtToken(userDetails);
+    String jwt = jwtUtils.generateJwtToken(userDetails);
 
     List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
         .collect(Collectors.toList());
 
-    RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId(),jwtToken);
+    RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId(),jwt);
 
-    return ResponseEntity.ok(new JwtResponse(jwtToken, refreshToken.getToken(), userDetails.getId(),
+    return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(),
         userDetails.getUsername(), userDetails.getEmail(), roles));
   }
 

@@ -1,11 +1,10 @@
-package com.bezkoder.spring.security.jwt.repository;
+package com.hai.tran.spring.security.jwt.repository;
 
-import java.util.Optional;
-
+import com.hai.tran.spring.security.jwt.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.bezkoder.spring.security.jwt.models.User;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

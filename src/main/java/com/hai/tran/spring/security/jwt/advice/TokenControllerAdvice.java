@@ -1,14 +1,13 @@
-package com.bezkoder.spring.security.jwt.advice;
+package com.hai.tran.spring.security.jwt.advice;
 
-import java.util.Date;
-
+import com.hai.tran.spring.security.jwt.exception.TokenRefreshException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import com.bezkoder.spring.security.jwt.exception.TokenRefreshException;
+import java.util.Date;
 
 @RestControllerAdvice
 public class TokenControllerAdvice {

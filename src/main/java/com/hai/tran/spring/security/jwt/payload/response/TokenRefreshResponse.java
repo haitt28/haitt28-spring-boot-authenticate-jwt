@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.jwt.payload.response;
+package com.hai.tran.spring.security.jwt.payload.response;
 
 public class TokenRefreshResponse {
   private String accessToken;

@@ -1,4 +1,4 @@
-package com.bezkoder.spring.security.jwt.exception;
+package com.hai.tran.spring.security.jwt.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

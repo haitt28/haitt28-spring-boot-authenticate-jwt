@@ -1,8 +1,7 @@
-package com.bezkoder.spring.security.jwt.models;
-
-import java.time.Instant;
+package com.hai.tran.spring.security.jwt.models;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity(name = "refreshtoken")
 public class RefreshToken {

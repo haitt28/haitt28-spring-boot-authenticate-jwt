@@ -1,15 +1,13 @@
-package com.bezkoder.spring.security.jwt.security.jwt;
+package com.hai.tran.spring.security.jwt.security.jwt;
 
-import java.util.Date;
-
+import com.hai.tran.spring.security.jwt.security.services.UserDetailsImpl;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.bezkoder.spring.security.jwt.security.services.UserDetailsImpl;
-
-import io.jsonwebtoken.*;
+import java.util.Date;
 
 @Component
 public class JwtUtils {
