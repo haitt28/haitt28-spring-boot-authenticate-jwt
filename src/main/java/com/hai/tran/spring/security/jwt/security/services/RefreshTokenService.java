@@ -4,6 +4,8 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.bezkoder.spring.security.jwt.models.User;
+import com.bezkoder.spring.security.jwt.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ import com.bezkoder.spring.security.jwt.repository.UserRepository;
 
 @Service
 public class RefreshTokenService {
-  @Value("${bezkoder.app.jwtRefreshExpirationMs}")
+  @Value("${app.jwtRfExp}")
   private Long refreshTokenDurationMs;
 
   @Autowired
@@ -25,20 +27,24 @@ public class RefreshTokenService {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private JwtUtils jwtUtils;
+
   public Optional<RefreshToken> findByToken(String token) {
     return refreshTokenRepository.findByToken(token);
   }
 
-  public RefreshToken createRefreshToken(Long userId) {
+  public RefreshToken createRefreshToken(Long userId,String jwt) {
     RefreshToken refreshToken = new RefreshToken();
-
-    refreshToken.setUser(userRepository.findById(userId).get());
+    User user = userRepository.findById(userId).get();
+    refreshToken.setUser(user);
     refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
-    refreshToken.setToken(UUID.randomUUID().toString());
+    refreshToken.setToken(jwt);
 
     refreshToken = refreshTokenRepository.save(refreshToken);
     return refreshToken;
   }
+
 
   public RefreshToken verifyExpiration(RefreshToken token) {
     if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
@@ -51,6 +57,7 @@ public class RefreshTokenService {
 
   @Transactional
   public int deleteByUserId(Long userId) {
-    return refreshTokenRepository.deleteByUser(userRepository.findById(userId).get());
+    User user = userRepository.findById(userId).get();
+    return refreshTokenRepository.deleteByUser(user);
   }
 }
